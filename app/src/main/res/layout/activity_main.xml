@@ -32,6 +32,7 @@
         android:layout_marginTop="316dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
+        android:onClick="openStatisticsScreen"
         android:text="Statistics"
         android:textSize="50sp"
         android:typeface="normal"

@@ -17,4 +17,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, DifficultySelectionActivity.class);
         startActivity(intent);
     }
+
+    public void openStatisticsScreen(View view){
+        Intent intent = new Intent(this, StatisticsActivity.class);
+        startActivity(intent);
+    }
 }
