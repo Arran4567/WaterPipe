@@ -13,9 +13,7 @@ public class Pipe {
         return Math.random() < 0.5;
     }
 
-    public boolean getBend(){
-        return bend;
-    }
+    public boolean getBend(){return bend;}
 
     public int getDirection(){
         return direction;
