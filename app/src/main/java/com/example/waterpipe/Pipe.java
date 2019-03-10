@@ -1,29 +1,41 @@
 package com.example.waterpipe;
 
 public class Pipe {
+    private int rotation;
     private boolean bend;
-    private int direction;
+    private int[] position;
 
-    public Pipe(){
-        bend = getRandomBoolean();
-        direction = (int)(Math.random()*4);
+    public Pipe(int[] pos){
+        position = pos;
+        if(Math.random() < 0.5){
+            bend = true;
+        }else{
+            bend = false;
+        }
+        rotation = (int)(Math.random()*4);
     }
 
-    public static boolean getRandomBoolean() {
-        return Math.random() < 0.5;
+    public boolean isBend() {
+        return bend;
     }
 
-    public boolean getBend(){return bend;}
-
-    public int getDirection(){
-        return direction;
+    public void setBend(boolean bend) {
+        this.bend = bend;
     }
 
-    public void setBend(boolean newBend){
-        this.bend = newBend;
+    public int[] getPosition() {
+        return position;
     }
 
-    public void setDirection(int newDirection){
-        this.direction = newDirection;
+    public void setPosition(int[] position) {
+        this.position = position;
+    }
+
+    public int getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(int rotation) {
+        this.rotation = rotation;
     }
 }
