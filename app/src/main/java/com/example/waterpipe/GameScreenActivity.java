@@ -10,6 +10,8 @@ import android.view.KeyEvent;
 import android.widget.TextView;
 import android.view.View;
 
+import java.util.ArrayList;
+
 public class GameScreenActivity extends AppCompatActivity {
 
     private SystemClock systemClock;
@@ -43,9 +45,40 @@ public class GameScreenActivity extends AppCompatActivity {
             default:
                 throw new RuntimeException("Unknown button ID");
         }
-
+        ArrayList<Pipe> pipes = generatePipes();
+        populateGrid(pipes);
         startTime = SystemClock.uptimeMillis();
         customHandler.postDelayed(updateTimerThread, 0);
+    }
+
+    private ArrayList<Pipe> generatePipes(){
+        ArrayList<Pipe> pipes = new ArrayList<>();
+        for(int x = 0; x < 7; x++){
+            for(int y = 0; y < 7; y++){
+                int[] pos = {x,y};
+                Pipe p = new Pipe(pos);
+                pipes.add(p);
+            }
+        }
+        return pipes;
+    }
+
+    private void populateGrid(ArrayList<Pipe> pipes){
+        for(int i = 0; i < 49; i++){
+            String tile = "tile" + i;
+            Pipe p = pipes.get(i);
+            String bend;
+            if(p.isBend()){
+                bend = "L";
+            }else{
+                bend = "I";
+            }
+            int id = getResources().getIdentifier(tile, "id", getPackageName());
+            if(id != 0) {
+                TextView tv = findViewById(id);
+                tv.setText((bend + p.getRotation()));
+            }
+        }
     }
 
     private Runnable updateTimerThread = new Runnable() {
