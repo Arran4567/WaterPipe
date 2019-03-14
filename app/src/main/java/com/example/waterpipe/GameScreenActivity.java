@@ -7,6 +7,7 @@ import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.view.View;
 
@@ -67,16 +68,15 @@ public class GameScreenActivity extends AppCompatActivity {
         for(int i = 0; i < 49; i++){
             String tile = "tile" + i;
             Pipe p = pipes.get(i);
-            String bend;
-            if(p.isBend()){
-                bend = "L";
-            }else{
-                bend = "I";
-            }
             int id = getResources().getIdentifier(tile, "id", getPackageName());
             if(id != 0) {
-                TextView tv = findViewById(id);
-                tv.setText((bend + p.getRotation()));
+                ImageView iv = findViewById(id);
+                iv.setRotation((p.getRotation()*90));
+                if(p.isBend()){
+                    iv.setImageResource(R.drawable.bent);
+                }else{
+                    iv.setImageResource(R.drawable.straight);
+                }
             }
         }
     }
