@@ -17,7 +17,7 @@ public class GameScreenActivity extends AppCompatActivity {
 
     private SystemClock systemClock;
     private TextView tvTime;
-
+    private ArrayList<Pipe> pipes = new ArrayList<>();
     private long startTime = 0L;
 
     private Handler customHandler = new Handler();
@@ -46,14 +46,13 @@ public class GameScreenActivity extends AppCompatActivity {
             default:
                 throw new RuntimeException("Unknown button ID");
         }
-        ArrayList<Pipe> pipes = generatePipes();
+        generatePipes();
         populateGrid(pipes);
         startTime = SystemClock.uptimeMillis();
         customHandler.postDelayed(updateTimerThread, 0);
     }
 
-    private ArrayList<Pipe> generatePipes(){
-        ArrayList<Pipe> pipes = new ArrayList<>();
+    private void generatePipes(){
         for(int x = 0; x < 7; x++){
             for(int y = 0; y < 7; y++){
                 int[] pos = {x,y};
@@ -61,7 +60,6 @@ public class GameScreenActivity extends AppCompatActivity {
                 pipes.add(p);
             }
         }
-        return pipes;
     }
 
     private void populateGrid(ArrayList<Pipe> pipes){
@@ -79,6 +77,23 @@ public class GameScreenActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    public void rotateTile(View view){
+        int viewID = view.getId();
+        ImageView iv = findViewById(viewID);
+        String tileName = view.getResources().getResourceName(viewID);
+        int pipeID = 0;
+        try {
+            pipeID = Integer.parseInt (tileName.replaceFirst("^.*\\D",""));
+        } catch (Exception e) {}
+        Pipe p = pipes.get(pipeID);
+        if(p.getRotation()<3) {
+            p.setRotation(p.getRotation() + 1);
+        }else{
+            p.setRotation(0);
+        }
+        iv.setRotation(p.getRotation()*90);
     }
 
     private Runnable updateTimerThread = new Runnable() {

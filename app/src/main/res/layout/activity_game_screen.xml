@@ -45,42 +45,49 @@
                 android:id="@+id/tile0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
         </TableRow>
 
@@ -92,42 +99,49 @@
                 android:id="@+id/tile7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile13"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
         </TableRow>
@@ -140,42 +154,49 @@
                 android:id="@+id/tile14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile15"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile17"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile19"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile20"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
         </TableRow>
@@ -188,42 +209,49 @@
                 android:id="@+id/tile21"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile22"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile23"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile24"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile25"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile26"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile27"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
         </TableRow>
@@ -236,42 +264,49 @@
                 android:id="@+id/tile28"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile29"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile30"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile31"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile32"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile33"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile34"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
         </TableRow>
@@ -284,42 +319,49 @@
                 android:id="@+id/tile35"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile36"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile37"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile38"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile39"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile40"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile41"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
         </TableRow>
@@ -332,42 +374,49 @@
                 android:id="@+id/tile42"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile43"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile44"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile45"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile46"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile47"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
             <ImageView
                 android:id="@+id/tile48"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="rotateTile"
                 app:srcCompat="@drawable/straight" />
 
         </TableRow>

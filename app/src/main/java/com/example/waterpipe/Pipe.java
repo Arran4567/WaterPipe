@@ -7,7 +7,7 @@ public class Pipe {
 
     public Pipe(int[] pos){
         position = pos;
-        if(Math.random() < 0.5){
+        if(Math.random() < 0.75){
             bend = true;
         }else{
             bend = false;
