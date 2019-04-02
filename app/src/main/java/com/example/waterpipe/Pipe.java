@@ -5,6 +5,8 @@ public class Pipe {
     private boolean bend;
     private int[] position;
 
+    public Pipe(){}
+
     public Pipe(int[] pos){
         position = pos;
         if(Math.random() < 0.75){
@@ -13,6 +15,8 @@ public class Pipe {
             bend = false;
         }
         rotation = (int)(Math.random()*4);
+        //A rotation of 0 will be "L" shaped
+        //Incrementing rotation by 1 rotates pipe 90 degrees clockwise
     }
 
     public boolean isBend() {
@@ -25,10 +29,6 @@ public class Pipe {
 
     public int[] getPosition() {
         return position;
-    }
-
-    public void setPosition(int[] position) {
-        this.position = position;
     }
 
     public int getRotation() {
