@@ -14,7 +14,7 @@ public class Grid {
         for (int x = 0; x < 7; x++) {
             for (int y = 0; y < 7; y++) {
                 int[] pos = {x, y};
-                Pipe p = new Pipe(pos);
+                Pipe p = new Pipe(pos, ((7 * x) + y));
                 pipes.add(p);
             }
         }
@@ -30,41 +30,68 @@ public class Grid {
     }
 
     public boolean checkTileConnectivity(Pipe pipe1, Pipe pipe2) {
-        if (pipe1.getLinks().get(0).equals("up") && pipe1.getLinks().get(0).equals("down")) {
-            return true;
-        } else if (pipe1.getLinks().get(0).equals("down") && pipe1.getLinks().get(0).equals("up")) {
-            return true;
-        } else if (pipe1.getLinks().get(0).equals("left") && pipe1.getLinks().get(0).equals("right")) {
-            return true;
-        } else if (pipe1.getLinks().get(0).equals("right") && pipe1.getLinks().get(0).equals("left")) {
-            return true;
-        } else if (pipe1.getLinks().get(1).equals("up") && pipe1.getLinks().get(0).equals("down")) {
-            return true;
-        } else if (pipe1.getLinks().get(1).equals("down") && pipe1.getLinks().get(0).equals("up")) {
-            return true;
-        } else if (pipe1.getLinks().get(1).equals("left") && pipe1.getLinks().get(0).equals("right")) {
-            return true;
-        } else if (pipe1.getLinks().get(1).equals("right") && pipe1.getLinks().get(0).equals("left")) {
-            return true;
-        } else if (pipe1.getLinks().get(0).equals("up") && pipe1.getLinks().get(1).equals("down")) {
-            return true;
-        } else if (pipe1.getLinks().get(0).equals("down") && pipe1.getLinks().get(1).equals("up")) {
-            return true;
-        } else if (pipe1.getLinks().get(0).equals("left") && pipe1.getLinks().get(1).equals("right")) {
-            return true;
-        } else if (pipe1.getLinks().get(0).equals("right") && pipe1.getLinks().get(1).equals("left")) {
-            return true;
-        } else if (pipe1.getLinks().get(1).equals("up") && pipe1.getLinks().get(1).equals("down")) {
-            return true;
-        } else if (pipe1.getLinks().get(1).equals("down") && pipe1.getLinks().get(1).equals("up")) {
-            return true;
-        } else if (pipe1.getLinks().get(1).equals("left") && pipe1.getLinks().get(1).equals("right")) {
-            return true;
-        } else if (pipe1.getLinks().get(1).equals("right") && pipe1.getLinks().get(1).equals("left")) {
-            return true;
-        } else {
-            return false;
+        for(Pipe i: getConnectedPipes(pipe1)){
+            if(i.equals(pipe2)){
+                for(Pipe j: getConnectedPipes(pipe2)){
+                    if (j.equals(pipe1)){
+                        return true;
+                    }
+                }
+            }
         }
+        return false;
+    }
+
+    public ArrayList<Pipe> getConnectedPipes(Pipe pipe){
+        ArrayList<Pipe> connectedPipes = new ArrayList<>();
+        int[] posAbove = {pipe.getPosition()[0]-1,pipe.getPosition()[1]};
+        int[] posRight = {pipe.getPosition()[0],pipe.getPosition()[1]+1};
+        int[] posBelow = {pipe.getPosition()[0]+1,pipe.getPosition()[1]};
+        int[] posLeft = {pipe.getPosition()[0],pipe.getPosition()[1]-1};
+        if(pipe.isBend()){
+            switch (pipe.getRotation()){
+                case 0:
+                    connectedPipes.add(this.findByPos(posAbove[0], posAbove[1]));
+                    connectedPipes.add(this.findByPos(posRight[0], posRight[1]));
+                    break;
+                case 1:
+                    connectedPipes.add(this.findByPos(posRight[0], posRight[1]));
+                    connectedPipes.add(this.findByPos(posBelow[0], posBelow[1]));
+                    break;
+                case 2:
+                    connectedPipes.add(this.findByPos(posBelow[0], posBelow[1]));
+                    connectedPipes.add(this.findByPos(posLeft[0], posLeft[1]));
+                    break;
+                case 3:
+                    connectedPipes.add(this.findByPos(posLeft[0], posLeft[1]));
+                    connectedPipes.add(this.findByPos(posAbove[0], posAbove[1]));
+                    break;
+                default:
+                    throw new RuntimeException("Unknown Rotation");
+            }
+        }else{
+            switch (pipe.getRotation()){
+                case 0:
+                    connectedPipes.add(this.findByPos(posAbove[0], posAbove[1]));
+                    connectedPipes.add(this.findByPos(posBelow[0], posBelow[1]));
+                    break;
+                case 1:
+                    connectedPipes.add(this.findByPos(posLeft[0], posLeft[1]));
+                    connectedPipes.add(this.findByPos(posRight[0], posRight[1]));
+                    break;
+                case 2:
+                    connectedPipes.add(this.findByPos(posAbove[0], posAbove[1]));
+                    connectedPipes.add(this.findByPos(posBelow[0], posBelow[1]));
+                    break;
+                case 3:
+                    connectedPipes.add(this.findByPos(posLeft[0], posLeft[1]));
+                    connectedPipes.add(this.findByPos(posRight[0], posRight[1]));
+                    break;
+                default:
+                    throw new RuntimeException("Unknown Rotation");
+            }
+        }
+        return connectedPipes;
     }
 
     public ArrayList<Pipe> findSurroundTiles(Pipe p) {

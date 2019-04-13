@@ -3,6 +3,7 @@ package com.example.waterpipe;
 import java.util.ArrayList;
 
 public class Pipe {
+    private int pipeID;
     private int rotation;
     private ArrayList<String> links = new ArrayList<>();
     private boolean bend;
@@ -20,7 +21,12 @@ public class Pipe {
         this.visited = visited;
     }
 
-    public Pipe(int[] pos) {
+    public int getId() {
+        return pipeID;
+    }
+
+    public Pipe(int[] pos, int id) {
+        pipeID = id;
         position = pos;
         visited = false;
         if (Math.random() < 0.7) {
@@ -42,12 +48,14 @@ public class Pipe {
         this.bend = bend;
     }
 
-    public ArrayList<String> getLinks() { return links; }
+    public ArrayList<String> getLinks() {
+        return links;
+    }
 
     public void updateLinks() {
         this.links.clear();
-        if(bend){
-            switch (rotation){
+        if (bend) {
+            switch (rotation) {
                 case 0:
                     this.links.add("up");
                     this.links.add("right");
@@ -67,8 +75,8 @@ public class Pipe {
                 default:
                     throw new RuntimeException("Unknown Rotation");
             }
-        }else{
-            switch (rotation){
+        } else {
+            switch (rotation) {
                 case 0:
                     this.links.add("up");
                     this.links.add("down");
