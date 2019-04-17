@@ -105,8 +105,41 @@ public class GameScreenActivity extends AppCompatActivity {
         return possibleSolution;
     }
 
+    //Attempt 3
+    private boolean DFS(Grid searchGrid, Pipe src){
+        searchStack.add(src);
+        src.setVisited(true);
+        for(Pipe p: searchGrid.findSurroundTiles(src)){
+            if(p.equals(searchGrid.getPipe(48))&& searchGrid.checkTileConnectivity(src, p) && (searchGrid.getPipe(48).getLinks().get(0) == "down" || searchGrid.getPipe(48).getLinks().get(1) == "down")){
+                numSolutions++;
+            }else if(!p.isVisited() && searchGrid.checkTileConnectivity(src, p)){
+                DFS(searchGrid, p);
+            }else if(!p.isVisited() && !searchGrid.checkTileConnectivity(src, p)){
+                for(int i = 0; i < 4; i++){
+                    searchGrid.rotatePipe(p);
+                    DFS(searchGrid, p);
+                }
+            }
+            searchStack.pop();
+            for(Pipe j: searchGrid.getPipes()){
+                for(Pipe k: searchStack){
+                    if(!j.equals(k)){
+                        j.setVisited(false);
+                    }else{
+                        j.setVisited(true);
+                        break;
+                    }
+                }
+            }
+        }
+        if(numSolutions > 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
 
-    private boolean DFS(Grid searchGrid, Pipe src) {
+    /* private boolean DFS(Grid searchGrid, Pipe src) {
         // Create a stack for DFS
         Stack<Pipe> stack = new Stack<>();
         // Push the current source node
@@ -128,18 +161,18 @@ public class GameScreenActivity extends AppCompatActivity {
             // If a adjacent has not been visited, then push it
             // to the stack.
             for (Pipe p : searchGrid.findSurroundTiles(s)) {
-                for (int i = 0; i < 3; i++) {
-                    if (!searchGrid.checkTileConnectivity(s, p)) {
+                for (int i = 0; i < 4; i++) {
+                    if (!p.isVisited() && searchGrid.checkTileConnectivity(s, p)) {
+                        stack.push(p);
                         searchGrid.rotatePipe(p);
-                    } else if (p.getId() == 48){
+                    }else if (!searchGrid.checkTileConnectivity(s, p) && !p.isVisited()) {
+                        searchGrid.rotatePipe(p);
+                    } else if (p.getId() == 48 && searchGrid.checkTileConnectivity(s, p)){
                         if(p.getLinks().get(0).equals("down") || p.getLinks().get(1).equals("down")) {
                             numSolutions++;
                         }
                     } else {
-                        if (!p.isVisited()) {
-                            stack.push(p);
-                            searchGrid.rotatePipe(p);
-                        }
+                        Log.d("Error", "Connected to a visited pipe");
                     }
                 }
             }
