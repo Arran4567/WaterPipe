@@ -21,10 +21,18 @@ public class Grid {
     }
 
     public void rotatePipe(Pipe p) {
-        if (p.getRotation() < 3) {
-            p.setRotation(p.getRotation() + 1);
-        } else {
-            p.setRotation(0);
+        if(p.isBend()){
+            if (p.getRotation() < 3) {
+                p.setRotation(p.getRotation() + 1);
+            } else {
+                p.setRotation(0);
+            }
+        }else{
+            if (p.getRotation() < 1) {
+                p.setRotation(p.getRotation() + 1);
+            } else {
+                p.setRotation(0);
+            }
         }
         p.updateLinks();
     }
@@ -42,11 +50,11 @@ public class Grid {
         return false;
     }
 
-    public ArrayList<Pipe> getConnectedPipes(Pipe pipe){
+    private ArrayList<Pipe> getConnectedPipes(Pipe pipe){
         ArrayList<Pipe> connectedPipes = new ArrayList<>();
-        int[] posAbove = {pipe.getPosition()[0]-1,pipe.getPosition()[1]};
-        int[] posRight = {pipe.getPosition()[0],pipe.getPosition()[1]+1};
-        int[] posBelow = {pipe.getPosition()[0]+1,pipe.getPosition()[1]};
+        int[] posAbove = {pipe.getPosition()[0] - 1, pipe.getPosition()[1]};
+        int[] posRight = {pipe.getPosition()[0], pipe.getPosition()[1] + 1};
+        int[] posBelow = {pipe.getPosition()[0] + 1, pipe.getPosition()[1]};
         int[] posLeft = {pipe.getPosition()[0],pipe.getPosition()[1]-1};
         if(pipe.isBend()){
             switch (pipe.getRotation()){
@@ -132,6 +140,9 @@ public class Grid {
     }
 
     public void setPipes(ArrayList<Pipe> pipes) {
-        this.pipes = pipes;
+        this.pipes.clear();
+        for (Pipe p: pipes) {
+            this.pipes.add(p);
+        }
     }
 }

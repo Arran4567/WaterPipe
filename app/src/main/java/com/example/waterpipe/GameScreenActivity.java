@@ -9,13 +9,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.view.View;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Stack;
-import java.util.Vector;
 
 public class GameScreenActivity extends AppCompatActivity {
 
@@ -36,16 +34,53 @@ public class GameScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
-        determineDifficulty(getIntent().getIntExtra("difficulty", -1));
+        int difficulty = getIntent().getIntExtra("difficulty", -1);
+        determineDifficulty(difficulty);
         tvTime = findViewById(R.id.tvTime);
-        populateGridView();
+
+        createGrid(difficulty);
+
+        TextView tvNumSol = findViewById(R.id.tvNumSol);
+        tvNumSol.setText("Number of solutions: " + numSolutions);
+
         startTime = SystemClock.uptimeMillis();
         customHandler.postDelayed(updateTimerThread, 0);
+    }
+
+    private void createGrid(int difficulty) {
+        numSolutions = 0;
         Grid searchGrid = new Grid();
         searchGrid.setPipes(grid.getPipes());
-        boolean possibleSolution = DFSUtil(searchGrid);
-        TextView tvNumSol = findViewById(R.id.tvNumSol);
-        tvNumSol.setText("" + numSolutions);
+        DFSUtil(searchGrid);
+        switch (difficulty) {
+            case 0:
+                while (!(numSolutions < 7 && numSolutions >= 5)) {
+                    numSolutions = 0;
+                    grid = new Grid();
+                    searchGrid.setPipes(grid.getPipes());
+                    DFSUtil(searchGrid);
+                }
+                break;
+            case 1:
+                while (!(numSolutions < 5 && numSolutions >= 3)) {
+                    numSolutions = 0;
+                    grid = new Grid();
+                    searchGrid.setPipes(grid.getPipes());
+                    DFSUtil(searchGrid);
+                }
+                break;
+            case 2:
+                while (!(numSolutions < 3 && numSolutions > 0)) {
+                    numSolutions = 0;
+                    grid = new Grid();
+                    searchGrid.setPipes(grid.getPipes());
+                    DFSUtil(searchGrid);
+                }
+                break;
+            default:
+                throw new RuntimeException("Unknown button ID");
+        }
+        populateGridView();
     }
 
     private void determineDifficulty(int difficulty) {
@@ -95,175 +130,111 @@ public class GameScreenActivity extends AppCompatActivity {
         Pipe p = grid.getPipe(pipeID);
         grid.rotatePipe(p);
         iv.setRotation(grid.getPipe(pipeID).getRotation() * 90);
+        checkCompletion(grid.getPipe(0));
     }
 
-    private boolean DFSUtil(Grid searchGrid) {
+    private void checkCompletion(Pipe src) {
+        src.setVisited(true);
+        for (Pipe p : grid.findSurroundTiles(src)) {
+            if (grid.checkTileConnectivity(src, p) && p.getId() == 48) {
+                if (p.getLinks().get(0).equals("down") || p.getLinks().get(1).equals("down")) {
+                    stopTimer();
+                    return;
+                }
+            } else if (!p.isVisited() && grid.checkTileConnectivity(src, p)) {
+                checkCompletion(p);
+            }
+        }
+        src.setVisited(false);
+    }
+
+    private void DFSUtil(Grid searchGrid) {
         while (searchGrid.getPipe(0).getRotation() != 0) {
             searchGrid.rotatePipe(searchGrid.getPipe(0));
         }
-        boolean possibleSolution = DFS(searchGrid, searchGrid.getPipe(0));
-        return possibleSolution;
+        DFS(searchGrid, searchGrid.getPipe(0));
     }
 
-    //Attempt 3
-    private boolean DFS(Grid searchGrid, Pipe src){
-        searchStack.add(src);
+    private void DFS(Grid searchGrid, Pipe src) {
         src.setVisited(true);
-        for(Pipe p: searchGrid.findSurroundTiles(src)){
-            if(p.equals(searchGrid.getPipe(48))&& searchGrid.checkTileConnectivity(src, p) && (searchGrid.getPipe(48).getLinks().get(0) == "down" || searchGrid.getPipe(48).getLinks().get(1) == "down")){
-                numSolutions++;
-            }else if(!p.isVisited() && searchGrid.checkTileConnectivity(src, p)){
-                DFS(searchGrid, p);
-            }else if(!p.isVisited() && !searchGrid.checkTileConnectivity(src, p)){
-                for(int i = 0; i < 4; i++){
-                    searchGrid.rotatePipe(p);
-                    DFS(searchGrid, p);
-                }
-            }
-            searchStack.pop();
-            for(Pipe j: searchGrid.getPipes()){
-                for(Pipe k: searchStack){
-                    if(!j.equals(k)){
-                        j.setVisited(false);
-                    }else{
-                        j.setVisited(true);
-                        break;
-                    }
-                }
-            }
-        }
-        if(numSolutions > 0){
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    /* private boolean DFS(Grid searchGrid, Pipe src) {
-        // Create a stack for DFS
-        Stack<Pipe> stack = new Stack<>();
-        // Push the current source node
-        stack.push(src);
-
-        while (!stack.empty()) {
-            // Pop a vertex from stack and print it
-            Pipe s = stack.pop();
-
-            // Stack may contain same vertex twice. So
-            // we need to print the popped item only
-            // if it is not visited.
-            if (!src.isVisited()) {
-                Log.d("id", "" + s.getId());
-                s.setVisited(true);
-            }
-
-            // Get all adjacent vertices of the popped vertex s
-            // If a adjacent has not been visited, then push it
-            // to the stack.
-            for (Pipe p : searchGrid.findSurroundTiles(s)) {
+        for (Pipe p : searchGrid.findSurroundTiles(src)) {
+            if (p.isBend()) {
                 for (int i = 0; i < 4; i++) {
-                    if (!p.isVisited() && searchGrid.checkTileConnectivity(s, p)) {
-                        stack.push(p);
+                    if (!p.isVisited() && !searchGrid.checkTileConnectivity(src, p)) {
                         searchGrid.rotatePipe(p);
-                    }else if (!searchGrid.checkTileConnectivity(s, p) && !p.isVisited()) {
-                        searchGrid.rotatePipe(p);
-                    } else if (p.getId() == 48 && searchGrid.checkTileConnectivity(s, p)){
-                        if(p.getLinks().get(0).equals("down") || p.getLinks().get(1).equals("down")) {
+                    } else if (searchGrid.checkTileConnectivity(src, p) && p.getId() == 48) {
+                        if (p.getLinks().get(0).equals("down") || p.getLinks().get(1).equals("down")) {
                             numSolutions++;
                         }
-                    } else {
-                        Log.d("Error", "Connected to a visited pipe");
+                        searchGrid.rotatePipe(p);
+                    } else if (!p.isVisited() && searchGrid.checkTileConnectivity(src, p)) {
+                        DFS(searchGrid, p);
+                        searchGrid.rotatePipe(p);
                     }
                 }
-            }
-        }
-        if(numSolutions > 0){
-            return true;
-        }else {
-            return false;
-        }
-    }
-    /*private boolean DLS(Grid searchGrid, Pipe src) {
-        searchStack.add(src);
-        src.setVisited(true);
-        if (src.getId() == 48) {
-            if (searchGrid.getPipe(48).getLinks().get(0).equals("down") || searchGrid.getPipe(48).getLinks().get(1).equals("down")) {
-                return true;
             } else {
-                return false;
-            }
-        }
-
-        while (!searchStack.empty()) {
-            Pipe currentNode = searchStack.peek();
-            ArrayList<Pipe> surroundingPipes;
-            surroundingPipes = searchGrid.findSurroundTiles(currentNode);
-            for (Pipe p : surroundingPipes) {
-                if (!p.isVisited()) {
-                    for (int i = 0; i < 3; i++) {
-                        if (searchGrid.checkTileConnectivity(src, p)) {
-                            if (DLS(searchGrid, p)) {
-                                numSolutions++;
-                            }
+                for (int i = 0; i < 2; i++) {
+                    if (!p.isVisited() && !searchGrid.checkTileConnectivity(src, p)) {
+                        searchGrid.rotatePipe(p);
+                    } else if (searchGrid.checkTileConnectivity(src, p) && p.getId() == 48) {
+                        if (p.getLinks().get(0).equals("down") || p.getLinks().get(1).equals("down")) {
+                            numSolutions++;
                         }
+                        searchGrid.rotatePipe(p);
+                    } else if (!p.isVisited() && searchGrid.checkTileConnectivity(src, p)) {
+                        DFS(searchGrid, p);
                         searchGrid.rotatePipe(p);
                     }
                 }
             }
         }
         src.setVisited(false);
-        searchStack.pop();
-        if(numSolutions > 0){
-            return true;
-        }else{
-            return false;
-        }
-    }*/
-
-        private Runnable updateTimerThread = new Runnable() {
-
-            public void run() {
-
-                timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
-
-                updatedTime = timeSwapBuff + timeInMilliseconds;
-
-                int secs = (int) (updatedTime / 1000);
-                int mins = secs / 60;
-                secs = secs % 60;
-                int milliseconds = (int) (updatedTime % 1000);
-                tvTime.setText("Time: " + mins + ":"
-                        + String.format("%02d", secs) + ":"
-                        + String.format("%03d", milliseconds));
-                customHandler.postDelayed(this, 0);
-            }
-        };
-
-        public void stopTimer (View view){
-            timeSwapBuff += timeInMilliseconds;
-            customHandler.removeCallbacks(updateTimerThread);
-        }
-
-        @Override
-        public boolean onKeyDown ( int keyCode, KeyEvent event){
-            if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("Are you sure you wish to go back? Your game data will be lost.")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                finish();
-                            }
-                        })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                //do nothing
-                                return;
-                            }
-                        });
-                AlertDialog alert = builder.create();
-                alert.show();
-            }
-            return super.onKeyDown(keyCode, event);
-        }
     }
+
+    private Runnable updateTimerThread = new Runnable() {
+
+        public void run() {
+
+            timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
+
+            updatedTime = timeSwapBuff + timeInMilliseconds;
+
+            int secs = (int) (updatedTime / 1000);
+            int mins = secs / 60;
+            secs = secs % 60;
+            int milliseconds = (int) (updatedTime % 1000);
+            tvTime.setText("Time: " + mins + ":"
+                    + String.format("%02d", secs) + ":"
+                    + String.format("%03d", milliseconds));
+            customHandler.postDelayed(this, 0);
+        }
+    };
+
+    public void stopTimer() {
+        timeSwapBuff += timeInMilliseconds;
+        customHandler.removeCallbacks(updateTimerThread);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Are you sure you wish to go back? Your game data will be lost.")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //do nothing
+                            return;
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+}

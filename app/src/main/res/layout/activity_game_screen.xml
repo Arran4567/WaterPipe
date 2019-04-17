@@ -455,18 +455,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
 
-    <Button
-        android:id="@+id/stopButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="56dp"
-        android:layout_marginRight="56dp"
-        android:onClick="stopTimer"
-        android:text="Stop Timer"
-        app:layout_constraintEnd_toStartOf="@+id/tvTime"
-        app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
-
     <TextView
         android:id="@+id/tvNumSol"
         android:layout_width="wrap_content"
