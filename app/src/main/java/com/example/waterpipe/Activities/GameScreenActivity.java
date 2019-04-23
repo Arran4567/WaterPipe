@@ -1,19 +1,21 @@
-package com.example.waterpipe;
+package com.example.waterpipe.Activities;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.widget.ImageView;
-import android.widget.Switch;
-import android.widget.TextView;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import java.util.Stack;
+import com.example.waterpipe.Objects.Grid;
+import com.example.waterpipe.Objects.Pipe;
+import com.example.waterpipe.R;
 
 public class GameScreenActivity extends AppCompatActivity {
 
@@ -21,8 +23,9 @@ public class GameScreenActivity extends AppCompatActivity {
     private long startTime = 0L;
     private Grid grid = new Grid();
 
-    Stack<Pipe> searchStack = new Stack<>();
     int numSolutions = 0;
+    int numRotations = 0;
+    String timeTaken;
 
     private Handler customHandler = new Handler();
 
@@ -131,6 +134,7 @@ public class GameScreenActivity extends AppCompatActivity {
         grid.rotatePipe(p);
         iv.setRotation(grid.getPipe(pipeID).getRotation() * 90);
         checkCompletion(grid.getPipe(0));
+        numRotations++;
     }
 
     private void checkCompletion(Pipe src) {
@@ -139,6 +143,8 @@ public class GameScreenActivity extends AppCompatActivity {
             if (grid.checkTileConnectivity(src, p) && p.getId() == 48) {
                 if (p.getLinks().get(0).equals("down") || p.getLinks().get(1).equals("down")) {
                     stopTimer();
+                    Dialog alert = completedPuzzle();
+                    alert.show();
                     return;
                 }
             } else if (!p.isVisited() && grid.checkTileConnectivity(src, p)) {
@@ -203,9 +209,9 @@ public class GameScreenActivity extends AppCompatActivity {
             int mins = secs / 60;
             secs = secs % 60;
             int milliseconds = (int) (updatedTime % 1000);
-            tvTime.setText("Time: " + mins + ":"
-                    + String.format("%02d", secs) + ":"
-                    + String.format("%03d", milliseconds));
+
+            timeTaken = mins + ":" + String.format("%02d", secs) + ":" + String.format("%03d", milliseconds);
+            tvTime.setText(timeTaken);
             customHandler.postDelayed(this, 0);
         }
     };
@@ -223,6 +229,8 @@ public class GameScreenActivity extends AppCompatActivity {
             builder.setMessage("Are you sure you wish to go back? Your game data will be lost.")
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            Intent intent = new Intent(getBaseContext(), DifficultySelectionActivity.class);
+                            startActivity(intent);
                             finish();
                         }
                     })
@@ -236,5 +244,23 @@ public class GameScreenActivity extends AppCompatActivity {
             alert.show();
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    public Dialog completedPuzzle(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Congratulations you completed the puzzle in " + numRotations + " rotations, with a time of: " + timeTaken + ".\nDo you wish to return to the main screen or see your statistics?")
+                .setPositiveButton("Main Screen", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+                    }
+                })
+                .setNegativeButton("Statistics", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent intent = new Intent(getBaseContext(), StatisticsActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+        return builder.create();
     }
 }

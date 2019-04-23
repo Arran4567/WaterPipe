@@ -1,4 +1,4 @@
-package com.example.waterpipe;
+package com.example.waterpipe.Objects;
 
 import java.util.ArrayList;
 

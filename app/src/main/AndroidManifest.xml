@@ -10,21 +10,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".StatisticsActivity"
+            android:name=".Activities.StatisticsActivity"
             android:label="@string/title_activity_statistics"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".DifficultySelectionActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:name=".Activities.DifficultySelectionActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".GameScreenActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:name=".Activities.GameScreenActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".Activities.MainActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
             <intent-filter>

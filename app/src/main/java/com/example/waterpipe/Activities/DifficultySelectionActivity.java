@@ -1,9 +1,11 @@
-package com.example.waterpipe;
+package com.example.waterpipe.Activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+
+import com.example.waterpipe.R;
 
 public class DifficultySelectionActivity extends AppCompatActivity {
 
@@ -29,5 +31,6 @@ public class DifficultySelectionActivity extends AppCompatActivity {
                 throw new RuntimeException("Unknown button ID");
         }
         startActivity(intent);
+        finish();
     }
 }

@@ -1,7 +1,6 @@
-package com.example.waterpipe;
+package com.example.waterpipe.Objects;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
 public class Grid {
     private ArrayList<Pipe> pipes = new ArrayList<>();
