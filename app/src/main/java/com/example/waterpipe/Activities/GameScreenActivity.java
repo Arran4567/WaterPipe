@@ -45,11 +45,6 @@ public class GameScreenActivity extends AppCompatActivity {
     Statistics dbStats = new Statistics("","","","","","");
     int difficulty;
     String txtDifficulty;
-    private String numComp;
-    private String avgTime;
-    private String bestTime;
-    private String avgRots;
-    private String leastRots;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,10 +153,11 @@ public class GameScreenActivity extends AppCompatActivity {
         int viewID = view.getId();
         ImageView iv = findViewById(viewID);
         String tileName = view.getResources().getResourceName(viewID);
-        int pipeID = 0;
+        int pipeID;
         try {
             pipeID = Integer.parseInt(tileName.replaceFirst("^.*\\D", ""));
         } catch (Exception e) {
+            throw new RuntimeException("Unknown PipeID");
         }
         Pipe p = grid.getPipe(pipeID);
         grid.rotatePipe(p);
@@ -216,8 +212,7 @@ public class GameScreenActivity extends AppCompatActivity {
     private String calcAvgRots(String avgRots, int numComp) {
         float ftAvgRots = Float.parseFloat(avgRots);
         float totalRots = ftAvgRots*numComp + (float) numRotations;
-        String newAvgRots = "" + (totalRots/(numComp+1));
-        return newAvgRots;
+        return "" + (totalRots/(numComp+1));
     }
 
     private String checkBestTime(String bestTime) {
@@ -352,7 +347,8 @@ public class GameScreenActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     }
-                });
+                })
+                .setCancelable(false);
         return builder.create();
     }
 }
