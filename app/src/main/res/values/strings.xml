@@ -4,6 +4,5 @@
     <string name="tab_text_2">Intermediate</string>
     <string name="tab_text_3">Expert</string>
     <string name="action_settings">Settings</string>
-    <string name="section_format">There are currently no statistics for tab: %1$d</string>
     <string name="title_activity_statistics">StatisticsActivity</string>
 </resources>

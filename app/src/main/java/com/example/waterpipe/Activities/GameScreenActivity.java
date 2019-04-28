@@ -19,7 +19,6 @@ import android.widget.TextView;
 
 import com.example.waterpipe.Database.Statistics;
 import com.example.waterpipe.Database.StatsViewModel;
-
 import com.example.waterpipe.Objects.Grid;
 import com.example.waterpipe.Objects.Pipe;
 import com.example.waterpipe.R;
@@ -190,11 +189,62 @@ public class GameScreenActivity extends AppCompatActivity {
     }
 
     private void saveStats() {
-        Statistics stats = new Statistics(txtDifficulty, timeTaken, timeTaken, "" + numRotations, "" + numRotations, "1");
+        Statistics stats;
         if(dbStats.getDifficulty().equals("")){
+            stats = new Statistics(txtDifficulty, timeTaken, timeTaken, "" + numRotations, "" + numRotations, "1");
+            mViewModel.insert(stats);
+        }else{
+            String avgTime = calcAvgTime(dbStats.getAvgTime(), Integer.parseInt(dbStats.getNumComp()));
+            String bestTime = checkBestTime(dbStats.getBestTime());
+            String avgRots = calcAvgRots(dbStats.getAvgRots(), Integer.parseInt(dbStats.getNumComp()));
+            String leastRots = checkLeastRots(dbStats.getLeastRots());
+            String numComp = "" + (Integer.parseInt(dbStats.getNumComp()) + 1);
+            stats = new Statistics(txtDifficulty, avgTime, bestTime, "" + avgRots, "" + leastRots, numComp);
+            mViewModel.delete(txtDifficulty);
             mViewModel.insert(stats);
         }
     }
+
+    private String checkLeastRots(String leastRots) {
+        if(numRotations > Integer.parseInt(leastRots)){
+            return leastRots;
+        }else{
+            return "" + numRotations;
+        }
+    }
+
+    private String calcAvgRots(String avgRots, int numComp) {
+        float ftAvgRots = Float.parseFloat(avgRots);
+        float totalRots = ftAvgRots*numComp + (float) numRotations;
+        String newAvgRots = "" + (totalRots/(numComp+1));
+        return newAvgRots;
+    }
+
+    private String checkBestTime(String bestTime) {
+        String splitTime[] = bestTime.split(":");
+        long totalMilliseconds = Long.parseLong(splitTime[0])*60000 + Long.parseLong(splitTime[1])*1000 + Long.parseLong(splitTime[2]);
+        long newBestTime = totalMilliseconds;
+        if(totalMilliseconds > updatedTime){
+            newBestTime = updatedTime;
+        }
+        int secs = (int) (newBestTime / 1000);
+        int mins = secs / 60;
+        secs = secs % 60;
+        int milliseconds = (int) (newBestTime % 1000);
+        return mins + ":" + String.format("%02d", secs) + ":" + String.format("%03d", milliseconds);
+    }
+
+    private String calcAvgTime(String avgTime, int numComp) {
+        String splitTime[] = avgTime.split(":");
+        long totalTime = (Long.parseLong(splitTime[0])*60000 + Long.parseLong(splitTime[1])*1000 + Long.parseLong(splitTime[2]))*numComp + updatedTime;
+        long newAvgTime = totalTime/(numComp+1);
+        int secs = (int) (newAvgTime / 1000);
+        int mins = secs / 60;
+        secs = secs % 60;
+        int milliseconds = (int) (newAvgTime % 1000);
+        return mins + ":" + String.format("%02d", secs) + ":" + String.format("%03d", milliseconds);
+    }
+
 
     private void DFSUtil(Grid searchGrid) {
         while (searchGrid.getPipe(0).getRotation() != 0) {
