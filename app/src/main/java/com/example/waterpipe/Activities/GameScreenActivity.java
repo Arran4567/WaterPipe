@@ -2,20 +2,29 @@ package com.example.waterpipe.Activities;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.waterpipe.Database.Statistics;
+import com.example.waterpipe.Database.StatsViewModel;
+
 import com.example.waterpipe.Objects.Grid;
 import com.example.waterpipe.Objects.Pipe;
 import com.example.waterpipe.R;
+
+import java.util.List;
 
 public class GameScreenActivity extends AppCompatActivity {
 
@@ -33,21 +42,50 @@ public class GameScreenActivity extends AppCompatActivity {
     long timeSwapBuff = 0L;
     long updatedTime = 0L;
 
+    private static StatsViewModel mViewModel;
+    Statistics dbStats = new Statistics("","","","","","");
+    int difficulty;
+    String txtDifficulty;
+    private String numComp;
+    private String avgTime;
+    private String bestTime;
+    private String avgRots;
+    private String leastRots;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
-        int difficulty = getIntent().getIntExtra("difficulty", -1);
+        difficulty = getIntent().getIntExtra("difficulty", -1);
+        txtDifficulty = determineDifficulty(difficulty);
+        TextView tv = findViewById(R.id.tvTitle);
+        tv.setText(txtDifficulty);
         determineDifficulty(difficulty);
         tvTime = findViewById(R.id.tvTime);
 
         createGrid(difficulty);
-
         TextView tvNumSol = findViewById(R.id.tvNumSol);
         tvNumSol.setText("Number of solutions: " + numSolutions);
 
         startTime = SystemClock.uptimeMillis();
         customHandler.postDelayed(updateTimerThread, 0);
+
+        mViewModel = ViewModelProviders.of(this).get(StatsViewModel.class);
+        getStats(txtDifficulty);
+    }
+
+    private void getStats(final String difficulty){
+        final LiveData<List<Statistics>> statsList = mViewModel.getAllStats();
+        statsList.observe(this, new Observer<List<Statistics>>() {
+            @Override
+            public void onChanged(@Nullable List<Statistics> statistics) {
+                for(Statistics s : statistics){
+                    if (s.getDifficulty().equals(difficulty)){
+                        dbStats = s;
+                    }
+                }
+            }
+        });
     }
 
     private void createGrid(int difficulty) {
@@ -86,18 +124,14 @@ public class GameScreenActivity extends AppCompatActivity {
         populateGridView();
     }
 
-    private void determineDifficulty(int difficulty) {
-        TextView tv = findViewById(R.id.tvTitle);
+    private String determineDifficulty(int difficulty) {
         switch (difficulty) {
             case 0:
-                tv.setText("Beginner");
-                break;
+                return "Beginner";
             case 1:
-                tv.setText("Intermediate");
-                break;
+                return "Intermediate";
             case 2:
-                tv.setText("Expert");
-                break;
+                return "Expert";
             default:
                 throw new RuntimeException("Unknown button ID");
         }
@@ -143,6 +177,7 @@ public class GameScreenActivity extends AppCompatActivity {
             if (grid.checkTileConnectivity(src, p) && p.getId() == 48) {
                 if (p.getLinks().get(0).equals("down") || p.getLinks().get(1).equals("down")) {
                     stopTimer();
+                    saveStats();
                     Dialog alert = completedPuzzle();
                     alert.show();
                     return;
@@ -152,6 +187,13 @@ public class GameScreenActivity extends AppCompatActivity {
             }
         }
         src.setVisited(false);
+    }
+
+    private void saveStats() {
+        Statistics stats = new Statistics(txtDifficulty, timeTaken, timeTaken, "" + numRotations, "" + numRotations, "1");
+        if(dbStats.getDifficulty().equals("")){
+            mViewModel.insert(stats);
+        }
     }
 
     private void DFSUtil(Grid searchGrid) {
