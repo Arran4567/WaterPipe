@@ -23,7 +23,6 @@ import com.example.waterpipe.Database.Statistics;
 import com.example.waterpipe.Database.StatsViewModel;
 import com.example.waterpipe.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class StatisticsActivity extends AppCompatActivity {
@@ -42,7 +41,6 @@ public class StatisticsActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    private List<Statistics> statistics = new ArrayList<>();
     private static StatsViewModel mViewModel;
 
     @Override
@@ -55,7 +53,7 @@ public class StatisticsActivity extends AppCompatActivity {
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), statistics);
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -72,7 +70,7 @@ public class StatisticsActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_statistics, menu);
-        return true;
+        return false;
     }
 
     @Override
@@ -110,7 +108,7 @@ public class StatisticsActivity extends AppCompatActivity {
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static PlaceholderFragment newInstance(int sectionNumber, List<Statistics> statistics) {
+        public static PlaceholderFragment newInstance(int sectionNumber) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
@@ -151,13 +149,13 @@ public class StatisticsActivity extends AppCompatActivity {
                 @Override
                 public void onChanged(@Nullable List<Statistics> statistics) {
                     String numComp = "Number of completed puzzles: " + getNumComp(statistics, difficulty);
-                    if(!numComp.equals("Number of completed puzzles: null")){
+                    if (!numComp.equals("Number of completed puzzles: null")) {
                         textView0.setText(numComp);
                         textView1.setText("Average time taken: " + getAvgTime(statistics, difficulty));
                         textView2.setText("Best time: " + getBestTime(statistics, difficulty));
                         textView3.setText("Average number of rotations: " + getAvgRots(statistics, difficulty));
                         textView4.setText("Least number of rotations: " + getLeastRots(statistics, difficulty));
-                    }else{
+                    } else {
                         textView0.setText("There are currently no statistics for this difficulty.");
                     }
                 }
@@ -216,18 +214,15 @@ public class StatisticsActivity extends AppCompatActivity {
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        private final List<Statistics> mStat;
-
-        public SectionsPagerAdapter(FragmentManager fm, List<Statistics> statistics) {
+        public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
-            mStat = statistics;
         }
 
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1, mStat);
+            return PlaceholderFragment.newInstance(position + 1);
         }
 
         @Override
