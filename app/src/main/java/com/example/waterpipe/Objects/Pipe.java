@@ -44,10 +44,6 @@ public class Pipe {
         return bend;
     }
 
-    public void setBend(boolean bend) {
-        this.bend = bend;
-    }
-
     public ArrayList<String> getLinks() {
         return links;
     }
