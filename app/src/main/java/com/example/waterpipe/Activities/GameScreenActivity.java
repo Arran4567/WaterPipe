@@ -167,21 +167,23 @@ public class GameScreenActivity extends AppCompatActivity {
     }
 
     private void checkCompletion(Pipe src) {
-        src.setVisited(true);
-        for (Pipe p : grid.findSurroundTiles(src)) {
-            if (grid.checkTileConnectivity(src, p) && p.getId() == 48) {
-                if (p.getLinks().get(0).equals("down") || p.getLinks().get(1).equals("down")) {
-                    stopTimer();
-                    saveStats();
-                    Dialog alert = completedPuzzle();
-                    alert.show();
-                    return;
+        if(grid.getPipe(0).getRotation() == 0) {
+            src.setVisited(true);
+            for (Pipe p : grid.findSurroundTiles(src)) {
+                if (grid.checkTileConnectivity(src, p) && p.getId() == 48) {
+                    if (p.getLinks().get(0).equals("down") || p.getLinks().get(1).equals("down")) {
+                        stopTimer();
+                        saveStats();
+                        Dialog alert = completedPuzzle();
+                        alert.show();
+                        return;
+                    }
+                } else if (!p.isVisited() && grid.checkTileConnectivity(src, p)) {
+                    checkCompletion(p);
                 }
-            } else if (!p.isVisited() && grid.checkTileConnectivity(src, p)) {
-                checkCompletion(p);
             }
+            src.setVisited(false);
         }
-        src.setVisited(false);
     }
 
     private void saveStats() {
@@ -239,7 +241,6 @@ public class GameScreenActivity extends AppCompatActivity {
         int milliseconds = (int) (newAvgTime % 1000);
         return mins + ":" + String.format("%02d", secs) + ":" + String.format("%03d", milliseconds);
     }
-
 
     private void DFSUtil(Grid searchGrid) {
         while (searchGrid.getPipe(0).getRotation() != 0) {

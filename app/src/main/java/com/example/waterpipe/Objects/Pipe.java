@@ -106,4 +106,17 @@ public class Pipe {
     public void setRotation(int rotation) {
         this.rotation = rotation;
     }
+
+    //The following methods are only used for testing.
+    public void setPipeID(int pipeID) {
+        this.pipeID = pipeID;
+    }
+
+    public void setBend(boolean bend) {
+        this.bend = bend;
+    }
+
+    public void setPosition(int[] position) {
+        this.position = position;
+    }
 }
