@@ -27,47 +27,60 @@ import java.util.List;
 
 public class GameScreenActivity extends AppCompatActivity {
 
-    private TextView tvTime;
-    private long startTime = 0L;
+    //Variables for grid generation
     private Grid grid = new Grid();
+    private int numSolutions = 0;
+    private int difficulty;
 
-    int numSolutions = 0;
-    int numRotations = 0;
-    String timeTaken;
+    //Variables for statistics
+    private int numRotations = 0;
+    private String timeTaken;
 
+    //Variables for time taken
+    private TextView tvTime;
     private Handler customHandler = new Handler();
+    private long startTime = 0L;
+    private long timeInMilliseconds = 0L;
+    private long timeSwapBuff = 0L;
+    private long updatedTime = 0L;
 
-    long timeInMilliseconds = 0L;
-    long timeSwapBuff = 0L;
-    long updatedTime = 0L;
-
+    //Variables for database
     private static StatsViewModel mViewModel;
-    Statistics dbStats = new Statistics("","","","","","");
-    int difficulty;
-    String txtDifficulty;
+    private Statistics dbStats = new Statistics("","","","","","");
+    private String txtDifficulty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
+
+        //Getting selected difficulty and generate grid accordingly
         difficulty = getIntent().getIntExtra("difficulty", -1);
         txtDifficulty = determineDifficulty(difficulty);
         TextView tv = findViewById(R.id.tvTitle);
         tv.setText(txtDifficulty);
         determineDifficulty(difficulty);
-        tvTime = findViewById(R.id.tvTime);
-
         createGrid(difficulty);
         TextView tvNumSol = findViewById(R.id.tvNumSol);
         tvNumSol.setText("Number of solutions: " + numSolutions);
 
+        //Calculate out time taken
+        tvTime = findViewById(R.id.tvTime);
         startTime = SystemClock.uptimeMillis();
         customHandler.postDelayed(updateTimerThread, 0);
 
+        //Retrieve statistics from database
         mViewModel = ViewModelProviders.of(this).get(StatsViewModel.class);
         getStats(txtDifficulty);
     }
 
+    /**
+     * This method is used to retrieve all statistics from the database and stores it in a
+     * LiveData stored List of Statistics. It then continues to observe the LiveData and set
+     * TextViews in accordance to the difficulty tab chosen.
+     *
+     * @param difficulty
+     */
     private void getStats(final String difficulty){
         final LiveData<List<Statistics>> statsList = mViewModel.getAllStats();
         statsList.observe(this, new Observer<List<Statistics>>() {
@@ -82,6 +95,14 @@ public class GameScreenActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * This method uses a switch case statement to determine the number of solutions
+     * the grid must have before calling the necessary methods to generate the grids.
+     * Finally, the method will get the pipe relevant to each ImageView and set the
+     * image as necessary.
+     *
+     * @param difficulty
+     */
     private void createGrid(int difficulty) {
         numSolutions = 0;
         Grid searchGrid = new Grid();
@@ -118,6 +139,11 @@ public class GameScreenActivity extends AppCompatActivity {
         populateGridView();
     }
 
+    /**
+     * Converts the integer representation of difficulty to a String.
+     * @param difficulty
+     * @return difficulty as string
+     */
     private String determineDifficulty(int difficulty) {
         switch (difficulty) {
             case 0:
@@ -131,6 +157,9 @@ public class GameScreenActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Sets ImageView in accordance to relevant pipe
+     */
     private void populateGridView() {
         for (int i = 0; i < 49; i++) {
             String tile = "tile" + i;
@@ -149,6 +178,10 @@ public class GameScreenActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Calls all necessary methods to rotate the pressed tile
+     * @param view
+     */
     public void rotateTile(View view) {
         int viewID = view.getId();
         ImageView iv = findViewById(viewID);
@@ -166,6 +199,10 @@ public class GameScreenActivity extends AppCompatActivity {
         numRotations++;
     }
 
+    /**
+     *
+     * @param src
+     */
     private void checkCompletion(Pipe src) {
         if(grid.getPipe(0).getRotation() == 0) {
             src.setVisited(true);
